@@ -1,0 +1,1564 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["multiSchema"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  schemas  = ["stripe"]
+}
+
+model account {
+  id                  String   @id
+  business_profile    Json?
+  business_type       String?
+  capabilities        Json?
+  charges_enabled     Boolean?
+  company             Json?
+  controller          Json?
+  country             String?
+  created             Int?
+  default_currency    String?
+  details_submitted   Boolean?
+  email               String?
+  external_accounts   Json?
+  future_requirements Json?
+  individual          Json?
+  metadata            Json?
+  object              String
+  payouts_enabled     Boolean?
+  requirements        Json?
+  settings            Json?
+  tos_acceptance      Json?
+  type                String?
+
+  @@schema("stripe")
+}
+
+model application {
+  id     String  @id
+  name   String?
+  object String
+
+  @@schema("stripe")
+}
+
+model application_fee {
+  id                      String   @id
+  account                 Json
+  amount                  Int
+  amount_refunded         Int
+  application             Json
+  balance_transaction     Json?
+  charge                  Json
+  created                 Int?
+  currency                String
+  livemode                Boolean?
+  object                  String
+  originating_transaction Json?
+  refunded                Boolean
+  refunds                 Json
+
+  @@schema("stripe")
+}
+
+// TODO: primary key? Int or String?
+// TODO: foreign key?
+model balance {
+  available         Json
+  connect_reserved  Json?
+  instant_available Json?
+  issuing           Json?
+  livemode          Boolean?
+  object            String
+  pending           Json
+
+  @@schema("stripe")
+}
+
+model capability {
+  id                  String  @id
+  account             Json
+  future_requirements Json?
+  object              String
+  requested           Boolean
+  requested_at        Int?
+  requirements        Json?
+  status              String?
+
+  @@schema("stripe")
+}
+
+// TODO: primary key? Int or String?
+// TODO: foreign key?
+model cash_balance {
+  available Json?
+  customer  String
+  livemode  Boolean?
+  object    String
+  settings  Json
+
+  @@schema("stripe")
+}
+
+model charge {
+  id                              String   @id
+  amount                          Int
+  amount_captured                 Int
+  amount_refunded                 Int
+  application                     Json?
+  application_fee                 Json?
+  application_fee_amount          Int?
+  balance_transaction             Json?
+  billing_details                 Json
+  calculated_statement_descriptor String?
+  captured                        Boolean
+  created                         Int?
+  currency                        String
+  customer                        Json?
+  description                     String?
+  disputed                        Boolean
+  failure_balance_transaction     Json?
+  failure_code                    String?
+  failure_message                 String?
+  fraud_details                   Json?
+  invoice                         Json?
+  livemode                        Boolean?
+  metadata                        Json
+  object                          String
+  on_behalf_of                    Json?
+  outcome                         Json?
+  paid                            Boolean
+  payment_intent                  Json?
+  payment_method                  String?
+  payment_method_details          Json?
+  radar_options                   Json?
+  receipt_email                   String?
+  receipt_number                  String?
+  receipt_url                     String?
+  refunded                        Boolean
+  refunds                         Json
+  review                          Json?
+  shipping                        Json?
+  source_transfer                 Json?
+  statement_descriptor            String?
+  statement_descriptor_suffix     String?
+  status                          String?
+  transfer                        Json?
+  transfer_data                   Json?
+  transfer_group                  String?
+
+  @@schema("stripe")
+}
+
+model checkout_session {
+  id                          String   @id
+  after_expiration            Json?
+  allow_promotion_codes       Boolean?
+  amount_subtotal             Int?
+  amount_total                Int?
+  automatic_tax               Json
+  billing_address_collection  String?
+  cancel_url                  String
+  client_reference_id         String?
+  consent                     Json?
+  consent_collection          Json?
+  currency                    String?
+  customer                    Json?
+  customer_creation           String?
+  customer_details            Json?
+  customer_email              String?
+  expires_at                  Int
+  line_items                  Json?
+  livemode                    Boolean?
+  locale                      String?
+  metadata                    Json?
+  mode                        String
+  object                      String
+  payment_intent              Json?
+  payment_link                Json?
+  payment_method_collection   String?
+  payment_method_options      Json?
+  payment_method_types        Json
+  payment_status              String
+  phone_number_collection     Json?
+  recovered_from              String?
+  setup_intent                Json?
+  shipping_address_collection Json?
+  shipping_cost               Json?
+  shipping_details            Json?
+  shipping_options            Json
+  status                      String?
+  submit_type                 String?
+  subscription                Json?
+  success_url                 String
+  tax_id_collection           Json?
+  total_details               Json?
+  url                         String?
+
+  @@schema("stripe")
+}
+
+model configuration {
+  id                 String   @id
+  active             Boolean
+  application        Json?
+  business_profile   Json
+  created            Int?
+  default_return_url String?
+  features           Json
+  is_default         Boolean
+  livemode           Boolean?
+  metadata           Json?
+  object             String
+  updated            Int
+
+  @@schema("stripe")
+}
+
+model coupon {
+  id                 String   @id
+  amount_off         Int?
+  applies_to         Json?
+  created            Int?
+  currency           String?
+  currency_options   Json?
+  duration           String
+  duration_in_months Int?
+  livemode           Boolean?
+  max_redemptions    Int?
+  metadata           Json?
+  name               String?
+  object             String
+  percent_off        Int?
+  redeem_by          Int?
+  times_redeemed     Int
+  valid              Boolean
+
+  @@schema("stripe")
+}
+
+model credit_note {
+  id                           String   @id
+  amount                       Int
+  created                      Int?
+  currency                     String
+  customer                     Json
+  customer_balance_transaction Json?
+  discount_amount              Int
+  discount_amounts             Json
+  invoice                      Json
+  lines                        Json
+  livemode                     Boolean?
+  memo                         String?
+  metadata                     Json?
+  number                       String
+  object                       String
+  out_of_band_amount           Int?
+  pdf                          String
+  reason                       String?
+  refund                       Json?
+  status                       String?
+  subtotal                     Int
+  subtotal_excluding_tax       Int?
+  tax_amounts                  Json
+  total                        Int
+  total_excluding_tax          Int?
+  type                         String
+  voided_at                    Int?
+
+  @@schema("stripe")
+}
+
+model credit_reversal {
+  id                            String   @id
+  amount                        Int
+  currency                      String
+  financial_account             String
+  hosted_regulatory_receipt_url String?
+  livemode                      Boolean?
+  metadata                      Json
+  network                       String
+  object                        String
+  received_credit               String
+  status                        String?
+  status_transitions            Json
+  transaction                   Json?
+
+  @@schema("stripe")
+}
+
+model customer {
+  id                     String   @id
+  address                Json?
+  balance                Int?
+  cash_balance           Json?
+  created                Int?
+  currency               String?
+  default_source         Json?
+  delinquent             Boolean?
+  description            String?
+  discount               Json?
+  email                  String?
+  invoice_credit_balance Json?
+  invoice_prefix         String?
+  invoice_settings       Json?
+  livemode               Boolean?
+  metadata               Json?
+  name                   String?
+  next_invoice_sequence  Int?
+  object                 String
+  phone                  String?
+  preferred_locales      Json?
+  shipping               Json?
+  sources                Json?
+  subscriptions          Json?
+  tax                    Json?
+  tax_exempt             String?
+  tax_ids                Json?
+  test_clock             Json?
+
+  @@schema("stripe")
+}
+
+model customer_cash_balance_transaction {
+  id                     String   @id @id
+  applied_to_payment     Json?
+  created                Int?
+  currency               String
+  customer               Json
+  ending_balance         Int
+  funded                 Json?
+  livemode               Boolean?
+  net_amount             Int
+  object                 String
+  refunded_from_payment  Json?
+  type                   String
+  unapplied_from_payment Json?
+
+  @@schema("stripe")
+}
+
+model debit_reversal {
+  id                            String   @id
+  amount                        Int
+  currency                      String
+  financial_account             String?
+  hosted_regulatory_receipt_url String?
+  linked_flows                  Json?
+  livemode                      Boolean?
+  metadata                      Json
+  network                       String
+  object                        String
+  received_debit                String
+  status                        String?
+  status_transitions            Json
+  transaction                   Json?
+
+  @@schema("stripe")
+}
+
+model discount {
+  id               String  @id
+  checkout_session String?
+  coupon           Json
+  customer         Json?
+  end              Int?
+  invoice          String?
+  invoice_item     String?
+  object           String
+  promotion_code   Json?
+  start            Int
+  subscription     String?
+
+  @@schema("stripe")
+}
+
+model dispute {
+  id                   String   @id
+  amount               Int
+  balance_transactions Json
+  charge               Json
+  created              Int?
+  currency             String
+  evidence             Json
+  evidence_details     Json
+  is_charge_refundable Boolean
+  livemode             Boolean?
+  metadata             Json
+  object               String
+  payment_intent       Json?
+  reason               String
+  status               String?
+
+  @@schema("stripe")
+}
+
+model early_fraud_warning {
+  id             String   @id
+  actionable     Boolean
+  charge         Json
+  created        Int?
+  fraud_type     String
+  livemode       Boolean?
+  object         String
+  payment_intent Json?
+
+  @@schema("stripe")
+}
+
+model file {
+  id         String  @id
+  created    Int?
+  expires_at Int?
+  filename   String?
+  links      Json?
+  object     String
+  purpose    String?
+  size       Int
+  title      String?
+  type       String?
+  url        String?
+
+  @@schema("stripe")
+}
+
+model financial_account {
+  id                    String   @id
+  active_features       Json
+  balance               Json
+  country               String
+  created               Int?
+  features              Json?
+  financial_addresses   Json
+  livemode              Boolean?
+  metadata              Json?
+  object                String
+  pending_features      Json
+  platform_restrictions Json?
+  restricted_features   Json
+  status                String?
+  status_details        Json
+  supported_currencies  Json
+
+  @@schema("stripe")
+}
+
+model inbound_transfer {
+  id                            String   @id
+  amount                        Int
+  cancelable                    Boolean
+  created                       Int?
+  currency                      String
+  description                   String?
+  failure_details               Json?
+  financial_account             String
+  hosted_regulatory_receipt_url String?
+  linked_flows                  Json
+  livemode                      Boolean?
+  metadata                      Json
+  object                        String
+  origin_payment_method         String
+  origin_payment_method_details Json?
+  returned                      Boolean?
+  statement_descriptor          String
+  status                        String?
+  status_transitions            Json
+  transaction                   Json?
+
+  @@schema("stripe")
+}
+
+model invoice {
+  id                               String   @id
+  account_country                  String?
+  account_name                     String?
+  account_tax_ids                  Json?
+  amount_due                       Int
+  amount_paid                      Int
+  amount_remaining                 Int
+  application                      Json?
+  application_fee_amount           Int?
+  attempt_count                    Int
+  attempted                        Boolean
+  auto_advance                     Boolean?
+  automatic_tax                    Json
+  billing_reason                   String?
+  charge                           Json?
+  collection_method                String
+  created                          Int?
+  currency                         String
+  custom_fields                    Json?
+  customer                         Json?
+  customer_address                 Json?
+  customer_email                   String?
+  customer_name                    String?
+  customer_phone                   String?
+  customer_shipping                Json?
+  customer_tax_exempt              String?
+  customer_tax_ids                 Json?
+  default_payment_method           Json?
+  default_source                   Json?
+  default_tax_rates                Json
+  description                      String?
+  discount                         Json?
+  discounts                        Json?
+  due_date                         Int?
+  ending_balance                   Int?
+  footer                           String?
+  hosted_invoice_url               String?
+  invoice_pdf                      String?
+  last_finalization_error          Json?
+  lines                            Json
+  livemode                         Boolean?
+  metadata                         Json?
+  next_payment_attempt             Int?
+  number                           String?
+  object                           String
+  on_behalf_of                     Json?
+  paid                             Boolean
+  paid_out_of_band                 Boolean
+  payment_intent                   Json?
+  payment_settings                 Json
+  period_end                       Int
+  period_start                     Int
+  post_payment_credit_notes_amount Int
+  pre_payment_credit_notes_amount  Int
+  quote                            Json?
+  receipt_number                   String?
+  rendering_options                Json?
+  starting_balance                 Int
+  statement_descriptor             String?
+  status                           String?
+  status_transitions               Json
+  subscription                     Json?
+  subscription_proration_date      Int?
+  subtotal                         Int
+  subtotal_excluding_tax           Int?
+  tax                              Int?
+  test_clock                       Json?
+  threshold_reason                 Json?
+  total                            Int
+  total_discount_amounts           Json?
+  total_excluding_tax              Int?
+  total_tax_amounts                Json
+  transfer_data                    Json?
+  webhooks_delivered_at            Int?
+
+  @@schema("stripe")
+}
+
+model invoiceitem {
+  id                  String   @id
+  amount              Int
+  currency            String
+  customer            Json
+  date                Int
+  description         String?
+  discountable        Boolean
+  discounts           Json?
+  invoice             Json?
+  livemode            Boolean?
+  metadata            Json?
+  object              String
+  period              Json
+  price               Json?
+  proration           Boolean
+  quantity            Int
+  subscription        Json?
+  subscription_item   String?
+  tax_rates           Json?
+  test_clock          Json?
+  unit_amount         Int?
+  unit_amount_decimal String?
+
+  @@schema("stripe")
+}
+
+model issuing_authorization {
+  id                   String   @id
+  amount               Int
+  amount_details       Json?
+  approved             Boolean
+  authorization_method String
+  balance_transactions Json
+  card                 Json
+  cardholder           Json?
+  created              Int?
+  currency             String
+  livemode             Boolean?
+  merchant_amount      Int
+  merchant_currency    String
+  merchant_data        Json
+  metadata             Json
+  object               String
+  pending_request      Json?
+  request_history      Json
+  status               String?
+  transactions         Json
+  treasury             Json?
+  verification_data    Json
+  wallet               String?
+
+  @@schema("stripe")
+}
+
+model issuing_card {
+  id                  String   @id
+  brand               String
+  cancellation_reason String?
+  cardholder          Json
+  created             Int?
+  currency            String
+  cvc                 String?
+  exp_month           Int
+  exp_year            Int
+  financial_account   String?
+  last4               String
+  livemode            Boolean?
+  metadata            Json
+  number              String?
+  object              String
+  replaced_by         Json?
+  replacement_for     Json?
+  replacement_reason  String?
+  shipping            Json?
+  spending_controls   Json
+  status              String?
+  type                String
+  wallets             Json?
+
+  @@schema("stripe")
+}
+
+model issuing_cardholder {
+  id                String   @id
+  billing           Json
+  company           Json?
+  created           Int?
+  email             String?
+  individual        Json?
+  livemode          Boolean?
+  metadata          Json
+  name              String
+  object            String
+  phone_number      String?
+  requirements      Json
+  spending_controls Json?
+  status            String?
+  type              String?
+
+  @@schema("stripe")
+}
+
+model issuing_dispute {
+  id                   String   @id
+  amount               Int
+  balance_transactions Json?
+  created              Int?
+  currency             String
+  evidence             Json
+  livemode             Boolean?
+  metadata             Json
+  object               String
+  status               String?
+  transaction          Json
+  treasury             Json?
+
+  @@schema("stripe")
+}
+
+model issuing_transaction {
+  id                  String   @id
+  amount              Int
+  amount_details      Json?
+  authorization       Json?
+  balance_transaction Json?
+  card                Json
+  cardholder          Json?
+  created             Int?
+  currency            String
+  dispute             Json?
+  livemode            Boolean?
+  merchant_amount     Int
+  merchant_currency   String
+  merchant_data       Json
+  metadata            Json
+  object              String
+  purchase_details    Json?
+  treasury            Json?
+  type                String?
+  wallet              String?
+
+  @@schema("stripe")
+}
+
+model mandate {
+  id                     String   @id
+  customer_acceptance    Json
+  livemode               Boolean?
+  multi_use              Json?
+  object                 String
+  payment_method         Json
+  payment_method_details Json
+  single_use             Json?
+  status                 String?
+  type                   String
+
+  @@schema("stripe")
+}
+
+model order {
+  id               String   @id
+  amount_subtotal  Int
+  amount_total     Int
+  application      Json?
+  automatic_tax    Json?
+  billing_details  Json?
+  client_secret    String?
+  created          Int?
+  currency         String
+  customer         Json?
+  description      String?
+  discounts        Json?
+  ip_address       String?
+  line_items       Json?
+  livemode         Boolean?
+  metadata         Json?
+  object           String
+  payment          Json
+  shipping_cost    Json?
+  shipping_details Json?
+  status           String?
+  tax_details      Json?
+  total_details    Json
+
+  @@schema("stripe")
+}
+
+model outbound_payment {
+  id                                 String   @id
+  amount                             Int
+  cancelable                         Boolean
+  created                            Int?
+  currency                           String
+  customer                           String?
+  description                        String?
+  destination_payment_method         String?
+  destination_payment_method_details Json?
+  end_user_details                   Json?
+  expected_arrival_date              Int
+  financial_account                  String
+  hosted_regulatory_receipt_url      String?
+  livemode                           Boolean?
+  metadata                           Json
+  object                             String
+  returned_details                   Json?
+  statement_descriptor               String
+  status                             String?
+  status_transitions                 Json
+  transaction                        Json
+
+  @@schema("stripe")
+}
+
+model outbound_transfer {
+  id                                 String   @id
+  amount                             Int
+  cancelable                         Boolean
+  created                            Int?
+  currency                           String
+  description                        String?
+  destination_payment_method         String
+  destination_payment_method_details Json
+  expected_arrival_date              Int
+  financial_account                  String
+  hosted_regulatory_receipt_url      String?
+  livemode                           Boolean?
+  metadata                           Json
+  object                             String
+  returned_details                   Json?
+  statement_descriptor               String
+  status                             String?
+  status_transitions                 Json
+  transaction                        Json
+
+  @@schema("stripe")
+}
+
+model payment_intent {
+  id                          String   @id
+  amount                      Int
+  amount_capturable           Int?
+  amount_details              Json?
+  amount_received             Int?
+  application                 Json?
+  application_fee_amount      Int?
+  automatic_payment_methods   Json?
+  canceled_at                 Int?
+  cancellation_reason         String?
+  capture_method              String
+  charges                     Json?
+  client_secret               String?
+  confirmation_method         String
+  created                     Int?
+  currency                    String
+  customer                    Json?
+  description                 String?
+  invoice                     Json?
+  last_payment_error          Json?
+  livemode                    Boolean?
+  metadata                    Json?
+  next_action                 Json?
+  object                      String
+  on_behalf_of                Json?
+  payment_method              Json?
+  payment_method_options      Json?
+  payment_method_types        Json
+  processing                  Json?
+  receipt_email               String?
+  review                      Json?
+  setup_future_usage          String?
+  shipping                    Json?
+  statement_descriptor        String?
+  statement_descriptor_suffix String?
+  status                      String?
+  transfer_data               Json?
+  transfer_group              String?
+
+  @@schema("stripe")
+}
+
+model payment_link {
+  id                          String   @id
+  active                      Boolean
+  after_completion            Json
+  allow_promotion_codes       Boolean
+  application_fee_amount      Int?
+  application_fee_percent     Int?
+  automatic_tax               Json
+  billing_address_collection  String
+  consent_collection          Json?
+  currency                    String
+  customer_creation           String
+  line_items                  Json?
+  livemode                    Boolean?
+  metadata                    Json
+  object                      String
+  on_behalf_of                Json?
+  payment_intent_data         Json?
+  payment_method_collection   String
+  payment_method_types        Json?
+  phone_number_collection     Json
+  shipping_address_collection Json?
+  shipping_options            Json
+  submit_type                 String
+  subscription_data           Json?
+  tax_id_collection           Json
+  transfer_data               Json?
+  url                         String
+
+  @@schema("stripe")
+}
+
+model payment_method {
+  id                String   @id
+  acss_debit        Json?
+  affirm            Json?
+  afterpay_clearpay Json?
+  alipay            Json?
+  au_becs_debit     Json?
+  bacs_debit        Json?
+  bancontact        Json?
+  billing_details   Json
+  blik              Json?
+  boleto            Json?
+  card              Json?
+  card_present      Json?
+  created           Int?
+  customer          Json?
+  customer_balance  Json?
+  eps               Json?
+  fpx               Json?
+  giropay           Json?
+  grabpay           Json?
+  ideal             Json?
+  interac_present   Json?
+  klarna            Json?
+  konbini           Json?
+  link              Json?
+  livemode          Boolean?
+  metadata          Json?
+  object            String
+  oxxo              Json?
+  p24               Json?
+  paynow            Json?
+  promptpay         Json?
+  radar_options     Json?
+  sepa_debit        Json?
+  sofort            Json?
+  type              String?
+  us_bank_account   Json?
+  wechat_pay        Json?
+
+  @@schema("stripe")
+}
+
+model payout {
+  id                          String   @id
+  amount                      Int
+  arrival_date                Int
+  automatic                   Boolean
+  balance_transaction         Json?
+  created                     Int?
+  currency                    String
+  description                 String?
+  destination                 Json?
+  failure_balance_transaction Json?
+  failure_code                String?
+  failure_message             String?
+  livemode                    Boolean?
+  metadata                    Json?
+  method                      String
+  object                      String
+  original_payout             Json?
+  reversed_by                 Json?
+  source_type                 String
+  statement_descriptor        String?
+  status                      String?
+  type                        String?
+
+  @@schema("stripe")
+}
+
+model person {
+  id                           String   @id
+  account                      String
+  address                      Json?
+  address_kana                 Json?
+  address_kanji                Json?
+  created                      Int?
+  dob                          Json?
+  email                        String?
+  first_name                   String?
+  first_name_kana              String?
+  first_name_kanji             String?
+  full_name_aliases            Json?
+  future_requirements          Json?
+  gender                       String?
+  id_number_provided           Boolean?
+  id_number_secondary_provided Boolean?
+  last_name                    String?
+  last_name_kana               String?
+  last_name_kanji              String?
+  maiden_name                  String?
+  metadata                     Json?
+  nationality                  String?
+  object                       String
+  phone                        String?
+  political_exposure           String?
+  registered_address           Json?
+  relationship                 Json?
+  requirements                 Json?
+  ssn_last_4_provided          Boolean?
+  verification                 Json?
+
+  @@schema("stripe")
+}
+
+model plan {
+  id                String   @id
+  active            Boolean
+  aggregate_usage   String?
+  amount            Int?
+  amount_decimal    String?
+  billing_scheme    String
+  created           Int?
+  currency          String
+  interval          String
+  interval_count    Int
+  livemode          Boolean?
+  metadata          Json?
+  nickname          String?
+  object            String
+  product           Json?
+  tiers             Json?
+  tiers_mode        String?
+  transform_usage   Json?
+  trial_period_days Int?
+  usage_type        String
+
+  @@schema("stripe")
+}
+
+model price {
+  id                  String   @id
+  active              Boolean
+  billing_scheme      String
+  created             Int?
+  currency            String
+  currency_options    Json?
+  custom_unit_amount  Json?
+  livemode            Boolean?
+  lookup_key          String?
+  metadata            Json
+  nickname            String?
+  object              String
+  product             Json
+  recurring           Json?
+  tax_behavior        String?
+  tiers               Json?
+  tiers_mode          String?
+  transform_quantity  Json?
+  type                String
+  unit_amount         Int?
+  unit_amount_decimal String?
+
+  @@schema("stripe")
+}
+
+model product {
+  id                   String   @id
+  active               Boolean
+  created              Int?
+  default_price        Json?
+  description          String?
+  images               Json
+  livemode             Boolean?
+  metadata             Json
+  name                 String
+  object               String
+  package_dimensions   Json?
+  shippable            Boolean?
+  statement_descriptor String?
+  tax_code             Json?
+  unit_label           String?
+  updated              Int
+  url                  String?
+
+  @@schema("stripe")
+}
+
+model promotion_code {
+  id              String   @id
+  active          Boolean
+  code            String
+  coupon          Json
+  created         Int?
+  customer        Json?
+  expires_at      Int?
+  livemode        Boolean?
+  max_redemptions Int?
+  metadata        Json?
+  object          String
+  restrictions    Json
+  times_redeemed  Int
+
+  @@schema("stripe")
+}
+
+model quote {
+  id                      String   @id
+  amount_subtotal         Int
+  amount_total            Int
+  application             Json?
+  application_fee_amount  Int?
+  application_fee_percent Int?
+  automatic_tax           Json
+  collection_method       String
+  computed                Json
+  created                 Int?
+  currency                String?
+  customer                Json?
+  default_tax_rates       Json?
+  description             String?
+  discounts               Json
+  expires_at              Int
+  footer                  String?
+  from_quote              Json?
+  header                  String?
+  invoice                 Json?
+  invoice_settings        Json?
+  line_items              Json?
+  livemode                Boolean?
+  metadata                Json
+  number                  String?
+  object                  String
+  on_behalf_of            Json?
+  status                  String?
+  status_transitions      Json
+  subscription            Json?
+  subscription_data       Json
+  subscription_schedule   Json?
+  test_clock              Json?
+  total_details           Json
+  transfer_data           Json?
+
+  @@schema("stripe")
+}
+
+model reader {
+  id                String   @id
+  action            Json?
+  device_sw_version String?
+  device_type       String
+  ip_address        String?
+  label             String
+  livemode          Boolean?
+  location          Json?
+  metadata          Json
+  object            String
+  serial_number     String
+  status            String?
+
+  @@schema("stripe")
+}
+
+model received_credit {
+  id                                String   @id
+  amount                            Int
+  created                           Int?
+  currency                          String
+  description                       String
+  failure_code                      String?
+  financial_account                 String?
+  hosted_regulatory_receipt_url     String?
+  initiating_payment_method_details Json
+  linked_flows                      Json
+  livemode                          Boolean?
+  network                           String?
+  object                            String
+  reversal_details                  Json?
+  status                            String?
+  transaction                       Json?
+
+  @@schema("stripe")
+}
+
+model received_debit {
+  id                                String   @id
+  amount                            Int
+  created                           Int?
+  currency                          String
+  description                       String
+  failure_code                      String?
+  financial_account                 String?
+  hosted_regulatory_receipt_url     String?
+  initiating_payment_method_details Json?
+  linked_flows                      Json
+  livemode                          Boolean?
+  network                           String?
+  object                            String
+  reversal_details                  Json?
+  status                            String?
+  transaction                       Json?
+
+  @@schema("stripe")
+}
+
+model recipient {
+  id               String   @id
+  active_account   Json?
+  cards            Json?
+  created          Int?
+  default_card     Json?
+  description      String?
+  email            String?
+  livemode         Boolean?
+  metadata         Json
+  migrated_to      Json?
+  name             String?
+  object           String
+  rolled_back_from Json?
+  type             String
+
+  @@schema("stripe")
+}
+
+model refund {
+  id                          String  @id
+  amount                      Int
+  balance_transaction         Json?
+  charge                      Json?
+  created                     Int?
+  currency                    String
+  description                 String?
+  failure_balance_transaction Json?
+  failure_reason              String?
+  instructions_email          String?
+  metadata                    Json?
+  next_action                 Json?
+  object                      String
+  payment_intent              Json?
+  reason                      String?
+  receipt_number              String?
+  source_transfer_reversal    Json?
+  status                      String?
+  transfer_reversal           Json?
+
+  @@schema("stripe")
+}
+
+model report_run {
+  id           String   @id
+  created      Int?
+  error        String?
+  livemode     Boolean?
+  object       String
+  parameters   Json
+  report_type  String
+  result       Json?
+  status       String?
+  succeeded_at Int?
+
+  @@schema("stripe")
+}
+
+model report_type {
+  id                   String   @id
+  data_available_end   Int
+  data_available_start Int
+  default_columns      Json?
+  livemode             Boolean?
+  name                 String
+  object               String
+  updated              Int
+  version              Int
+
+  @@schema("stripe")
+}
+
+model review {
+  id                  String   @id
+  billing_zip         String?
+  charge              Json?
+  closed_reason       String?
+  created             Int?
+  ip_address          String?
+  ip_address_location Json?
+  livemode            Boolean?
+  object              String
+  open                Boolean
+  opened_reason       String
+  payment_intent      Json?
+  reason              String
+  session             Json?
+
+  @@schema("stripe")
+}
+
+model scheduled_query_run {
+  id                     String   @id
+  created                Int?
+  data_load_time         Int
+  error                  Json?
+  file                   Json?
+  livemode               Boolean?
+  object                 String
+  result_available_until Int
+  sql                    String
+  status                 String?
+  title                  String
+
+  @@schema("stripe")
+}
+
+model session {
+  id            String   @id
+  configuration Json?
+  created       Int?
+  customer      String
+  livemode      Boolean?
+  locale        String?
+  object        String
+  on_behalf_of  String?
+  return_url    String?
+  url           String
+
+  @@schema("stripe")
+}
+
+model setup_intent {
+  id                     String   @id
+  application            Json?
+  attach_to_self         Boolean?
+  cancellation_reason    String?
+  client_secret          String?
+  created                Int?
+  customer               Json?
+  description            String?
+  flow_directions        Json?
+  last_setup_error       Json?
+  latest_attempt         Json?
+  livemode               Boolean?
+  mandate                Json?
+  metadata               Json?
+  next_action            Json?
+  object                 String
+  on_behalf_of           Json?
+  payment_method         Json?
+  payment_method_options Json?
+  payment_method_types   Json
+  single_use_mandate     Json?
+  status                 String?
+  usage                  String
+
+  @@schema("stripe")
+}
+
+model sku {
+  id                 String   @id
+  active             Boolean
+  attributes         Json
+  created            Int?
+  currency           String
+  image              String?
+  inventory          Json
+  livemode           Boolean?
+  metadata           Json
+  object             String
+  package_dimensions Json?
+  price              Int
+  product            Json
+  updated            Int
+
+  @@schema("stripe")
+}
+
+model source {
+  id                   String   @id
+  ach_credit_transfer  Json?
+  ach_debit            Json?
+  acss_debit           Json?
+  alipay               Json?
+  amount               Int?
+  au_becs_debit        Json?
+  bancontact           Json?
+  card                 Json?
+  card_present         Json?
+  client_secret        String?
+  code_verification    Json?
+  created              Int?
+  currency             String?
+  customer             String?
+  eps                  Json?
+  flow                 String?
+  giropay              Json?
+  ideal                Json?
+  klarna               Json?
+  livemode             Boolean?
+  metadata             Json?
+  multibanco           Json?
+  object               String
+  owner                Json?
+  p24                  Json?
+  receiver             Json?
+  redirect             Json?
+  sepa_debit           Json?
+  sofort               Json?
+  source_order         Json?
+  statement_descriptor String?
+  status               String?
+  three_d_secure       Json?
+  type                 String?
+  usage                String?
+  wechat               Json?
+
+  @@schema("stripe")
+}
+
+model subscription {
+  id                                String   @id
+  application                       Json?
+  application_fee_percent           Int?
+  automatic_tax                     Json
+  billing_cycle_anchor              Int
+  billing_thresholds                Json?
+  cancel_at                         Int?
+  cancel_at_period_end              Boolean
+  canceled_at                       Int?
+  collection_method                 String
+  created                           Int?
+  currency                          String
+  current_period_end                Int
+  current_period_start              Int
+  customer                          Json
+  days_until_due                    Int?
+  default_payment_method            Json?
+  default_source                    Json?
+  default_tax_rates                 Json?
+  description                       String?
+  discount                          Json?
+  ended_at                          Int?
+  items                             Json
+  latest_invoice                    Json?
+  livemode                          Boolean?
+  metadata                          Json
+  next_pending_invoice_item_invoice Int?
+  object                            String
+  pause_collection                  Json?
+  payment_settings                  Json?
+  pending_invoice_item_interval     Json?
+  pending_setup_intent              Json?
+  pending_update                    Json?
+  schedule                          Json?
+  start_date                        Int
+  status                            String?
+  test_clock                        Json?
+  transfer_data                     Json?
+  trial_end                         Int?
+  trial_start                       Int?
+
+  @@schema("stripe")
+}
+
+model subscription_schedule {
+  id                    String   @id
+  application           Json?
+  canceled_at           Int?
+  completed_at          Int?
+  created               Int?
+  current_phase         Json?
+  customer              Json
+  default_settings      Json
+  end_behavior          String
+  livemode              Boolean?
+  metadata              Json?
+  object                String
+  phases                Json
+  released_at           Int?
+  released_subscription String?
+  status                String?
+  subscription          Json?
+  test_clock            Json?
+
+  @@schema("stripe")
+}
+
+model tax_id {
+  id           String   @id
+  country      String?
+  created      Int?
+  customer     Json?
+  livemode     Boolean?
+  object       String
+  type         String
+  value        String
+  verification Json?
+
+  @@schema("stripe")
+}
+
+model tax_rate {
+  id           String   @id
+  active       Boolean
+  country      String?
+  created      Int?
+  description  String?
+  display_name String
+  inclusive    Boolean
+  jurisdiction String?
+  livemode     Boolean?
+  metadata     Json?
+  object       String
+  percentage   Int
+  state        String?
+  tax_type     String?
+
+  @@schema("stripe")
+}
+
+model test_clock {
+  id            String   @id
+  created       Int?
+  deletes_after Int
+  frozen_time   Int
+  livemode      Boolean?
+  name          String?
+  object        String
+  status        String?
+
+  @@schema("stripe")
+}
+
+model topup {
+  id                         String   @id
+  amount                     Int
+  balance_transaction        Json?
+  created                    Int?
+  currency                   String
+  description                String?
+  expected_availability_date Int?
+  failure_code               String?
+  failure_message            String?
+  livemode                   Boolean?
+  metadata                   Json
+  object                     String
+  source                     Json?
+  statement_descriptor       String?
+  status                     String?
+  transfer_group             String?
+
+  @@schema("stripe")
+}
+
+model transaction {
+  id                   String   @id
+  ach_credit_transfer  Json?
+  amount               Int
+  chf_credit_transfer  Json?
+  created              Int?
+  currency             String
+  gbp_credit_transfer  Json?
+  livemode             Boolean?
+  object               String
+  paper_check          Json?
+  sepa_credit_transfer Json?
+  source               String
+  status               String?
+  type                 String
+
+  @@schema("stripe")
+}
+
+model transfer {
+  id                  String   @id
+  amount              Int
+  amount_reversed     Int
+  balance_transaction Json?
+  created             Int?
+  currency            String
+  description         String?
+  destination         Json?
+  destination_payment Json?
+  livemode            Boolean?
+  metadata            Json
+  object              String
+  reversals           Json
+  reversed            Boolean
+  source_transaction  Json?
+  source_type         String?
+  transfer_group      String?
+
+  @@schema("stripe")
+}
+
+model verification_session {
+  id                       String   @id
+  client_secret            String?
+  created                  Int?
+  last_error               Json?
+  last_verification_report Json?
+  livemode                 Boolean?
+  metadata                 Json
+  object                   String
+  options                  Json
+  redaction                Json?
+  status                   String?
+  type                     String?
+  url                      String?
+  verified_outputs         Json?
+
+  @@schema("stripe")
+}
